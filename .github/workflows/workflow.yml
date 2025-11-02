@@ -1,0 +1,32 @@
+name: CI Validate
+
+on: [push] # Run this on every push
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # This section is for Task 2
+      - name: Lint with flake8
+        run: |
+          echo "--- Linting with flake8 ---"
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      # --- THIS IS THE SECTION FOR TASK 3 ---
+      - name: Test with nosetests
+        run: |
+          echo "--- Testing with nosetests ---"
+          nosetests --verbose 
